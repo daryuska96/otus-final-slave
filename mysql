@@ -1,7 +1,7 @@
 #!/bin/bash
 
-docker exec -t slave_mysql mysql -uroot -pmypass -e "CHANGE MASTER TO MASTER_HOST='192.168.1.88', MASTER_USER='repl', MASTER_PASSWORD='slavepass', MASTER_LOG_FILE='mysql-bin-1.000003';"
+docker exec -t slave_mysql mysql -uroot -pmypass -e "CHANGE MASTER TO MASTER_HOST='192.168.1.88', MASTER_USER='repl', MASTER_PASSWORD='slavepass', MASTER_LOG_FILE='mysql-bin-1.000003';" #подсоединяемся к нашему мастер серверу
 sleep 3
-docker exec slave_mysql mysql -uroot -pmypass -e "START SLAVE;"
+docker exec slave_mysql mysql -uroot -pmypass -e "START SLAVE;"  #запускаем репликацию
 sleep 2
-docker exec slave_mysql mysql -uroot -pmypass -e "SHOW SLAVE STATUS\G"
+docker exec slave_mysql mysql -uroot -pmypass -e "SHOW SLAVE STATUS\G" #выводим на экран статус репликации
