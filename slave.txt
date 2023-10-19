@@ -4,7 +4,7 @@ echo "Офаем стандартный файрволл"
 systemctl disable firewalld #удаляем из автозагрузки firewalld
 systemctl stop firewalld #выключаем firewalld
 echo "Ставим другой фаерволл"
-dnf install -q iptables-services #устанавливаем iptables 
+dnf install -q -y iptables-services #устанавливаем iptables 
 cp ./iptables.conf /etc/sysconfig/iptables.conf
 systemctl restart iptables
 systemctl enable iptables
@@ -12,18 +12,15 @@ systemctl enable iptables
 sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config  #изменяем положение селинукс
 setenforce 0 #выключаем селинукс
 #установка докера
-MASTER_IP=192.168.1.88
 echo "Ставим докер"
-sudo yum install -y yum-utils 
+sudo yum install -q -y yum-utils 
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo yum install -q -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 systemctl start docker
 systemctl enable docker
-MASTER_IP=192.168.1.88
 echo "Ставим слейв MySQL"
 docker run -d --rm --name=slave_mysql --hostname=slave -v $PWD/d1:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass mysql/mysql-server:8.0 --server-id=2
 sleep 3
-MASTER_IP=192.168.1.88
 docker exec -t slave_mysql mysql -uroot -pmypass -e "CHANGE MASTER TO MASTER_HOST='192.168.1.88', MASTER_USER='repl', MASTER_PASSWORD='slavepass', MASTER_LOG_FILE='mysql-bin-1.000003';"
 sleep 3
 docker exec slave_mysql mysql -uroot -pmypass -e "START SLAVE;"
