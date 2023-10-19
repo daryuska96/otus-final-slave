@@ -21,9 +21,4 @@ systemctl enable docker
 echo "Ставим слейв MySQL"
 docker pull -q mysql/mysql-server:8.0
 docker run -d --rm --name=slave_mysql --hostname=slave -v $PWD/d1:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass mysql/mysql-server:8.0 --server-id=2
-sleep 3
-docker exec -t slave_mysql mysql -uroot -pmypass -e "CHANGE MASTER TO MASTER_HOST='192.168.1.88', MASTER_USER='repl', MASTER_PASSWORD='slavepass', MASTER_LOG_FILE='mysql-bin-1.000003';"
-sleep 3
-docker exec slave_mysql mysql -uroot -pmypass -e "START SLAVE;"
-sleep 2
-docker exec slave_mysql mysql -uroot -pmypass -e "SHOW SLAVE STATUS\G"
+echo "Слейв установлен"
