@@ -5,9 +5,9 @@ systemctl disable firewalld #удаляем из автозагрузки firewa
 systemctl stop firewalld #выключаем firewalld
 echo "Ставим другой фаерволл"
 dnf install -q -y iptables-services #устанавливаем iptables 
-cp ./iptables /etc/sysconfig/iptables
-systemctl restart iptables
-systemctl enable iptables
+cp ./iptables /etc/sysconfig/iptables #копируем настройки фаерволла
+systemctl restart iptables #рестартуем фаерволл
+systemctl enable iptables #включаем в автозагрузку
 #Выключение Selinux
 sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config  #изменяем положение селинукс
 setenforce 0 #выключаем селинукс
@@ -15,10 +15,10 @@ setenforce 0 #выключаем селинукс
 echo "Ставим докер"
 sudo yum install -q -y yum-utils 
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install -q -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-systemctl start docker
-systemctl enable docker
+sudo yum install -q -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin #добавление репозитория
+systemctl start docker #стартуем докер
+systemctl enable docker #включаем докер в автозагрузку
 echo "Ставим слейв MySQL"
-docker pull -q mysql/mysql-server:8.0
-docker run -d --rm --name=slave_mysql --hostname=slave -v $PWD/d1:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass mysql/mysql-server:8.0 --server-id=2
+docker pull -q mysql/mysql-server:8.0 #скачиваем образ MySQL
+docker run -d --rm --name=slave_mysql --hostname=slave -v $PWD/d1:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass mysql/mysql-server:8.0 --server-id=2  #запускаем контейнер со слейвом
 echo "Слейв установлен"
