@@ -5,7 +5,7 @@ systemctl disable firewalld #удаляем из автозагрузки firewa
 systemctl stop firewalld #выключаем firewalld
 echo "Ставим другой фаерволл"
 dnf install -q -y iptables-services #устанавливаем iptables 
-cp ./iptables.conf /etc/sysconfig/iptables.conf
+cp ./iptables /etc/sysconfig/iptables
 systemctl restart iptables
 systemctl enable iptables
 #Выключение Selinux
