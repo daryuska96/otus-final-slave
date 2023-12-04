@@ -20,5 +20,5 @@ systemctl start docker #стартуем докер
 systemctl enable docker #включаем докер в автозагрузку
 echo "Ставим слейв MySQL"
 docker pull -q mysql/mysql-server:8.0 #скачиваем образ MySQL
-docker run -d --rm --name=slave_mysql --hostname=slave -v $PWD/d1:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass mysql/mysql-server:8.0 --server-id=2  #запускаем контейнер со слейвом
+docker run -d --name=slave_mysql --hostname=slave -v $PWD/d1:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass mysql/mysql-server:8.0 --server-id=2  #запускаем контейнер со слейвом
 echo "Слейв установлен"
